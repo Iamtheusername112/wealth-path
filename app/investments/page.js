@@ -52,6 +52,14 @@ export default async function InvestmentsPage() {
     .eq('user_id', clerkUser.id)
     .order('created_at', { ascending: false })
 
+  // Fetch user's investment goals
+  const { data: goals } = await supabaseAdmin
+    .from('investment_goals')
+    .select('*')
+    .eq('user_id', clerkUser.id)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+
   // Generate signed URL for profile image
   let profileImageUrl = dbUser.profile_image_url
   if (profileImageUrl) {
@@ -94,6 +102,7 @@ export default async function InvestmentsPage() {
       <InvestmentsContent 
         user={dbUser} 
         investments={investments || []}
+        goals={goals || []}
       />
     </div>
   )

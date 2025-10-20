@@ -11,15 +11,17 @@ import {
   Building2,
   Landmark,
   Home,
-  PieChart
+  PieChart,
+  Target
 } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
 import { InvestmentOpportunities } from "./investment-opportunities"
 import { PortfolioOverview } from "./portfolio-overview"
 import { InvestModal } from "./invest-modal"
 import { InvestmentCharts } from "./investment-charts"
+import { InvestmentGoals } from "./investment-goals"
 
-export function InvestmentsContent({ user, investments }) {
+export function InvestmentsContent({ user, investments, goals }) {
   const [activeTab, setActiveTab] = useState("overview")
   const [investModalOpen, setInvestModalOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(null)
@@ -149,6 +151,11 @@ export function InvestmentsContent({ user, investments }) {
             <span className="hidden sm:inline">Charts</span>
             <span className="sm:hidden">Charts</span>
           </TabsTrigger>
+          <TabsTrigger value="goals" active={activeTab === "goals"} className="flex-shrink-0">
+            <Target className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Goals</span>
+            <span className="sm:hidden">Goals</span>
+          </TabsTrigger>
           {categories.map(category => (
             <TabsTrigger 
               key={category.id} 
@@ -174,6 +181,10 @@ export function InvestmentsContent({ user, investments }) {
 
         <TabsContent value="charts">
           <InvestmentCharts investments={investments} />
+        </TabsContent>
+
+        <TabsContent value="goals">
+          <InvestmentGoals goals={goals || []} />
         </TabsContent>
 
         {categories.map(category => (
