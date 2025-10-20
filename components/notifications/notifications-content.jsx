@@ -55,15 +55,15 @@ export function NotificationsContent({ notifications, userId }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-              <Bell className="h-8 w-8 text-gold-600" />
+    <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12 pb-20 sm:pb-8 max-w-4xl">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2 flex items-center gap-2">
+              <Bell className="h-6 w-6 sm:h-8 sm:w-8 text-gold-600" />
               Notifications
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground">
               {unreadCount > 0 ? `You have ${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}` : 'You\'re all caught up!'}
             </p>
           </div>
@@ -72,44 +72,47 @@ export function NotificationsContent({ notifications, userId }) {
               variant="outline"
               onClick={handleMarkAllAsRead}
               disabled={loading}
+              className="w-full sm:w-auto flex-shrink-0"
+              size="sm"
             >
               <CheckCheck className="h-4 w-4 mr-2" />
-              Mark all as read
+              <span className="hidden sm:inline">Mark all as read</span>
+              <span className="sm:hidden">Mark all read</span>
             </Button>
           )}
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 sm:space-y-4">
         {notifications.length > 0 ? (
           notifications.map((notification) => (
             <Card 
               key={notification.id} 
-              className={`transition-all cursor-pointer ${!notification.is_read ? 'border-gold-600 bg-gold-50 dark:bg-gold-950/20' : ''}`}
+              className={`transition-all cursor-pointer shadow-lg shadow-black/10 ${!notification.is_read ? 'border-gold-600 bg-gold-50 dark:bg-gold-950/20' : ''}`}
               onClick={() => !notification.is_read && handleMarkAsRead(notification.id)}
             >
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+              <CardContent className="p-3 sm:p-4">
+                <div className="flex items-start justify-between gap-3 sm:gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start gap-2 mb-2">
                       {!notification.is_read ? (
-                        <Bell className="h-4 w-4 text-gold-600" />
+                        <Bell className="h-4 w-4 text-gold-600 flex-shrink-0 mt-0.5" />
                       ) : (
-                        <BellOff className="h-4 w-4 text-muted-foreground" />
+                        <BellOff className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
                       )}
-                      <p className={`${!notification.is_read ? 'font-semibold' : ''}`}>
+                      <p className={`text-sm sm:text-base ${!notification.is_read ? 'font-semibold' : ''}`}>
                         {notification.message}
                       </p>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground pl-6">
                       {formatDateTime(notification.created_at)}
                     </p>
                   </div>
-                  <div>
+                  <div className="flex-shrink-0">
                     {!notification.is_read ? (
-                      <Badge variant="pending">New</Badge>
+                      <Badge variant="pending" className="text-xs">New</Badge>
                     ) : (
-                      <Check className="h-5 w-5 text-green-600" />
+                      <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                     )}
                   </div>
                 </div>
@@ -117,11 +120,11 @@ export function NotificationsContent({ notifications, userId }) {
             </Card>
           ))
         ) : (
-          <Card>
-            <CardContent className="p-12 text-center">
-              <BellOff className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-lg font-semibold mb-2">No notifications</h3>
-              <p className="text-muted-foreground">
+          <Card className="shadow-lg shadow-black/10">
+            <CardContent className="p-8 sm:p-12 text-center">
+              <BellOff className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+              <h3 className="text-base sm:text-lg font-semibold mb-2">No notifications</h3>
+              <p className="text-sm sm:text-base text-muted-foreground">
                 You'll see important updates and alerts here
               </p>
             </CardContent>
