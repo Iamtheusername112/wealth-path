@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
-import { auth, currentUser } from "@clerk/nextjs/server"
+import { auth } from "@clerk/nextjs/server"
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import { requireAdmin } from "@/lib/check-admin"
 
 // Admin endpoint to credit or debit user balance
 export async function POST(request) {
@@ -11,16 +12,10 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Check if user is admin
-    const adminUser = await currentUser()
-    const { data: admin } = await supabaseAdmin
-      .from('admins')
-      .select('*')
-      .eq('email', adminUser.emailAddresses[0].emailAddress)
-      .single()
-
-    if (!admin) {
-      return NextResponse.json({ error: "Admin access required" }, { status: 403 })
+    // Check if user is admin (auto-creates if ADMIN_EMAIL matches)
+    const { authorized, response } = await requireAdmin()
+    if (!authorized) {
+      return NextResponse.json({ error: response.error }, { status: response.status })
     }
 
     const { userId, action, amount, reason } = await request.json()
