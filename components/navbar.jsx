@@ -279,17 +279,7 @@ export function Navbar({ user }) {
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <SheetContent side="right" className="w-[85%] max-w-sm p-0">
           <SheetHeader className="p-4 sm:p-6 border-b safe-area-top">
-            <div className="flex items-center justify-between">
-              <SheetTitle className="text-lg font-bold">Menu</SheetTitle>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setMobileMenuOpen(false)}
-                className="h-8 w-8"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
+            <SheetTitle className="text-lg font-bold">Menu</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col h-full">
 
