@@ -99,6 +99,38 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
+/* Premium Modal & Dialog Styles */
+@layer components {
+  /* Modal overlay with strong background */
+  [data-radix-dialog-overlay],
+  [data-sonner-toast] {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+  
+  /* Modal content - ensure proper contrast */
+  [data-radix-dialog-content] {
+    background: white !important;
+    border: 2px solid rgba(202, 138, 4, 0.2) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  .dark [data-radix-dialog-content] {
+    background: rgb(17, 24, 39) !important;
+    border: 2px solid rgba(202, 138, 4, 0.3) !important;
+  }
+  
+  /* Sheet/Drawer content - stronger background */
+  [data-radix-dialog-content][data-side] {
+    background: white !important;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  .dark [data-radix-dialog-content][data-side] {
+    background: rgb(17, 24, 39) !important;
+  }
+}
+
 /* Premium Mobile-First Styles */
 @layer base {
   /* Mobile-optimized typography */
