@@ -105,7 +105,7 @@ export function InvestmentsContent({ user, investments }) {
         <Card className="shadow-lg shadow-black/10">
           <CardHeader className="pb-2 p-4 sm:p-6">
             <CardDescription className="text-sm sm:text-base">Total Invested</CardDescription>
-            <CardTitle className="text-xl sm:text-2xl">{formatCurrency(totalInvested)}</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl">{formatCurrency(totalInitialInvestment)}</CardTitle>
           </CardHeader>
         </Card>
 
@@ -161,7 +161,7 @@ export function InvestmentsContent({ user, investments }) {
           <PortfolioOverview 
             investments={investments} 
             categories={categories}
-            totalInvested={totalInvested}
+            totalInvested={totalInitialInvestment}
             portfolioValue={portfolioValue}
           />
         </TabsContent>
