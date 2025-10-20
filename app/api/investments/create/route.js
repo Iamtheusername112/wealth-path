@@ -58,6 +58,7 @@ export async function POST(request) {
           category: category,
           asset_name: assetName,
           amount: amount,
+          initial_investment: amount, // Track original investment
           quantity: quantity,
           purchase_price: purchasePrice,
           current_price: purchasePrice,

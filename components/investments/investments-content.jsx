@@ -65,19 +65,27 @@ export function InvestmentsContent({ user, investments }) {
     }
   ]
 
-  const totalInvested = investments.reduce((sum, inv) => sum + parseFloat(inv.amount), 0)
+  // Calculate initial investment (what user originally invested)
+  const totalInitialInvestment = investments.reduce((sum, inv) => {
+    // Use initial_investment if available, otherwise fallback to amount
+    const initialAmount = inv.initial_investment 
+      ? parseFloat(inv.initial_investment)
+      : parseFloat(inv.amount)
+    return sum + initialAmount
+  }, 0)
+  
   const activeInvestments = investments.filter(inv => inv.status === 'active').length
 
-  // Calculate total portfolio value (with simulated gains/losses)
+  // Calculate current portfolio value (REAL values from admin adjustments!)
   const portfolioValue = investments.reduce((sum, inv) => {
-    const currentValue = inv.current_price && inv.quantity 
-      ? parseFloat(inv.current_price) * parseFloat(inv.quantity)
-      : parseFloat(inv.amount) * (1 + (Math.random() * 0.2 - 0.05)) // Simulated 5% variance
+    // Current value is the amount field (adjusted by admin via profit/loss)
+    const currentValue = parseFloat(inv.amount)
     return sum + currentValue
   }, 0)
 
-  const portfolioChange = portfolioValue - totalInvested
-  const portfolioChangePercent = totalInvested > 0 ? (portfolioChange / totalInvested) * 100 : 0
+  // Profit/Loss = Current Value - Initial Investment
+  const portfolioChange = portfolioValue - totalInitialInvestment
+  const portfolioChangePercent = totalInitialInvestment > 0 ? (portfolioChange / totalInitialInvestment) * 100 : 0
 
   const handleInvest = (category, asset) => {
     setSelectedCategory(category)

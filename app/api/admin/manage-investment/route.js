@@ -86,6 +86,7 @@ async function addInvestment(userId, investmentData, user) {
         category: category,
         asset_name: assetName,
         amount: parseFloat(amount),
+        initial_investment: parseFloat(amount), // Track original investment
         quantity: quantity ? parseFloat(quantity) : null,
         purchase_price: purchasePrice ? parseFloat(purchasePrice) : null,
         current_price: currentPrice ? parseFloat(currentPrice) : purchasePrice ? parseFloat(purchasePrice) : null,
