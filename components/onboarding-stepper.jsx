@@ -33,7 +33,7 @@ const steps = [
 
 export function OnboardingStepper({ currentStep = 1 }) {
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8">
+    <div className="w-full max-w-4xl mx-auto px-4 py-4 sm:py-6 lg:py-8">
       {/* Desktop Stepper */}
       <div className="hidden md:block">
         <div className="relative">
@@ -124,7 +124,7 @@ export function OnboardingStepper({ currentStep = 1 }) {
       </div>
 
       {/* Mobile Stepper */}
-      <div className="md:hidden space-y-4">
+      <div className="md:hidden space-y-3 sm:space-y-4">
         {steps.map((step, index) => {
           const isCompleted = currentStep > step.id
           const isCurrent = currentStep === step.id
@@ -137,7 +137,7 @@ export function OnboardingStepper({ currentStep = 1 }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
               className={cn(
-                "flex items-center gap-4 p-4 rounded-lg border-2 transition-all",
+                "flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border-2 transition-all duration-200 shadow-lg shadow-black/10",
                 isCurrent && "border-gold-600 bg-gold-50 dark:bg-gold-950/20",
                 isCompleted && "border-green-600/50 bg-green-50 dark:bg-green-950/20",
                 !isCompleted && !isCurrent && "border-muted"
@@ -145,16 +145,16 @@ export function OnboardingStepper({ currentStep = 1 }) {
             >
               {/* Icon */}
               <div className={cn(
-                "w-10 h-10 rounded-full flex items-center justify-center border-2",
+                "w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border-2 flex-shrink-0",
                 isCompleted && "bg-green-600 border-green-600",
                 isCurrent && "bg-gold-600 border-gold-600",
                 !isCompleted && !isCurrent && "bg-muted border-muted-foreground/20"
               )}>
                 {isCompleted ? (
-                  <CheckCircle2 className="w-5 h-5 text-white" />
+                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 ) : (
                   <Icon className={cn(
-                    "w-5 h-5",
+                    "w-4 h-4 sm:w-5 sm:h-5",
                     isCurrent && "text-white",
                     !isCurrent && "text-muted-foreground"
                   )} />
@@ -162,14 +162,14 @@ export function OnboardingStepper({ currentStep = 1 }) {
               </div>
 
               {/* Content */}
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className={cn(
-                  "font-semibold",
+                  "font-semibold text-sm sm:text-base",
                   isCurrent && "text-gold-700 dark:text-gold-400"
                 )}>
                   Step {step.id}: {step.name}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   {step.description}
                 </p>
               </div>
@@ -203,9 +203,9 @@ export function OnboardingStepper({ currentStep = 1 }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="mt-8 text-center"
+        className="mt-6 sm:mt-8 text-center"
       >
-        <p className="text-sm text-muted-foreground mb-2">
+        <p className="text-xs sm:text-sm text-muted-foreground mb-2">
           Overall Progress
         </p>
         <div className="w-full bg-muted rounded-full h-2 overflow-hidden">

@@ -100,47 +100,39 @@ export function SettingsContent({ user, clerkUser }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <Settings className="h-8 w-8 text-gold-600" />
-          Settings
-        </h1>
-        <p className="text-muted-foreground">Manage your account settings and preferences</p>
-      </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="w-full justify-start">
-          <TabsTrigger value="profile" active={activeTab === "profile"}>
-            <User className="h-4 w-4 mr-2" />
-            Profile
+    <div className="max-w-4xl mx-auto">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
+        <TabsList className="w-full justify-start overflow-x-auto gap-1 sm:gap-2 flex-nowrap">
+          <TabsTrigger value="profile" active={activeTab === "profile"} className="flex-shrink-0">
+            <User className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Profile</span>
           </TabsTrigger>
-          <TabsTrigger value="banking" active={activeTab === "banking"}>
-            <Building2 className="h-4 w-4 mr-2" />
-            Banking
+          <TabsTrigger value="banking" active={activeTab === "banking"} className="flex-shrink-0">
+            <Building2 className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Banking</span>
           </TabsTrigger>
-          <TabsTrigger value="security" active={activeTab === "security"}>
-            <Shield className="h-4 w-4 mr-2" />
-            Security
+          <TabsTrigger value="security" active={activeTab === "security"} className="flex-shrink-0">
+            <Shield className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Security</span>
           </TabsTrigger>
-          <TabsTrigger value="preferences" active={activeTab === "preferences"}>
-            <Bell className="h-4 w-4 mr-2" />
-            Preferences
+          <TabsTrigger value="preferences" active={activeTab === "preferences"} className="flex-shrink-0">
+            <Bell className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Preferences</span>
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile">
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile Information</CardTitle>
-              <CardDescription>Update your personal information</CardDescription>
+          <Card className="shadow-lg shadow-black/10">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-lg sm:text-xl">Profile Information</CardTitle>
+              <CardDescription className="text-sm sm:text-base">Update your personal information</CardDescription>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleProfileUpdate} className="space-y-4">
+            <CardContent className="p-4 sm:p-6">
+              <form onSubmit={handleProfileUpdate} className="space-y-4 sm:space-y-6">
                 {/* Profile Photo Section */}
-                <div className="flex flex-col items-center gap-4 pb-6 border-b">
+                <div className="flex flex-col items-center gap-3 sm:gap-4 pb-4 sm:pb-6 border-b">
                   <div className="relative">
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gold-600 shadow-lg bg-muted">
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-gold-600 shadow-lg bg-muted">
                       {profilePhotoPreview ? (
                         <img 
                           src={profilePhotoPreview} 
@@ -154,8 +146,8 @@ export function SettingsContent({ user, clerkUser }) {
                       )}
                     </div>
                     {uploadingPhoto && (
-                      <div className="absolute inset-0 w-32 h-32 rounded-full bg-black/50 flex items-center justify-center">
-                        <Loader2 className="h-8 w-8 text-white animate-spin" />
+                      <div className="absolute inset-0 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-black/50 flex items-center justify-center">
+                        <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 text-white animate-spin" />
                       </div>
                     )}
                   </div>
@@ -174,14 +166,16 @@ export function SettingsContent({ user, clerkUser }) {
                         variant="outline" 
                         asChild
                         disabled={uploadingPhoto}
+                        className="text-xs sm:text-sm"
                       >
                         <span className="cursor-pointer">
                           <Camera className="h-4 w-4 mr-2" />
-                          Change Profile Photo
+                          <span className="hidden sm:inline">Change Profile Photo</span>
+                          <span className="sm:hidden">Change Photo</span>
                         </span>
                       </Button>
                     </label>
-                    <p className="text-xs text-muted-foreground mt-2 text-center">
+                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-2 text-center">
                       JPG, PNG or WebP (max 10MB)
                     </p>
                   </div>
@@ -246,8 +240,8 @@ export function SettingsContent({ user, clerkUser }) {
 
                 {user?.account_number && (
                   <div>
-                    <Label>Your Account Number</Label>
-                    <div className="mt-2 p-4 rounded-lg border-2 border-gold-600/20 bg-gold-50 dark:bg-gold-950/10">
+                    <Label className="text-sm sm:text-base">Your Account Number</Label>
+                    <div className="mt-2 p-3 sm:p-4 rounded-lg border-2 border-gold-600/20 bg-gold-50 dark:bg-gold-950/10">
                       <button
                         type="button"
                         onClick={() => {
@@ -256,13 +250,13 @@ export function SettingsContent({ user, clerkUser }) {
                             description: user.account_number
                           })
                         }}
-                        className="group flex items-center justify-between w-full hover:opacity-80 transition-opacity"
+                        className="group flex items-center justify-between w-full hover:opacity-80 transition-opacity min-h-[44px]"
                       >
-                        <p className="font-mono text-xl font-bold text-gold-700 dark:text-gold-400 tracking-wider">
+                        <p className="font-mono text-base sm:text-xl font-bold text-gold-700 dark:text-gold-400 tracking-wider truncate pr-2">
                           {user.account_number}
                         </p>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <span className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline">
                             Click to copy
                           </span>
                           <svg 
@@ -279,7 +273,7 @@ export function SettingsContent({ user, clerkUser }) {
                   </div>
                 )}
 
-                <Button type="submit" disabled={loading} variant="gold">
+                <Button type="submit" disabled={loading} variant="gold" className="w-full sm:w-auto">
                   {loading ? "Saving..." : "Save Changes"}
                 </Button>
               </form>
@@ -288,88 +282,86 @@ export function SettingsContent({ user, clerkUser }) {
         </TabsContent>
 
         <TabsContent value="banking">
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <BankingDetails user={user} />
             <LinkedBanksSection userId={user?.id} />
           </div>
         </TabsContent>
 
         <TabsContent value="security">
-          <Card>
-            <CardHeader>
-              <CardTitle>Security Settings</CardTitle>
-              <CardDescription>Manage your account security</CardDescription>
+          <Card className="shadow-lg shadow-black/10">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-lg sm:text-xl">Security Settings</CardTitle>
+              <CardDescription className="text-sm sm:text-base">Manage your account security</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-4 rounded-lg border">
-                <h4 className="font-semibold mb-2">Password</h4>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Password is managed through Kinde authentication
+            <CardContent className="p-4 sm:p-6 space-y-4">
+              <div className="p-3 sm:p-4 rounded-lg border">
+                <h4 className="font-semibold mb-2 text-sm sm:text-base">Password</h4>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-3">
+                  Password is managed through Clerk authentication
                 </p>
-                <Button variant="outline" asChild>
-                  <a href={`${process.env.NEXT_PUBLIC_KINDE_ISSUER_URL}/account`} target="_blank" rel="noopener noreferrer">
-                    Manage in Kinde
-                  </a>
+                <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                  Manage Password
                 </Button>
               </div>
 
-              <div className="p-4 rounded-lg border">
-                <h4 className="font-semibold mb-2">Two-Factor Authentication</h4>
-                <p className="text-sm text-muted-foreground mb-3">
+              <div className="p-3 sm:p-4 rounded-lg border">
+                <h4 className="font-semibold mb-2 text-sm sm:text-base">Two-Factor Authentication</h4>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-3">
                   Add an extra layer of security to your account
                 </p>
-                <Badge>Coming Soon</Badge>
+                <Badge className="text-xs">Coming Soon</Badge>
               </div>
 
-              <div className="p-4 rounded-lg border">
-                <h4 className="font-semibold mb-2">Active Sessions</h4>
-                <p className="text-sm text-muted-foreground mb-3">
+              <div className="p-3 sm:p-4 rounded-lg border">
+                <h4 className="font-semibold mb-2 text-sm sm:text-base">Active Sessions</h4>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-3">
                   Manage your active login sessions
                 </p>
-                <Badge>Coming Soon</Badge>
+                <Badge className="text-xs">Coming Soon</Badge>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="preferences">
-          <Card>
-            <CardHeader>
-              <CardTitle>Notification Preferences</CardTitle>
-              <CardDescription>Manage how you receive notifications</CardDescription>
+          <Card className="shadow-lg shadow-black/10">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-lg sm:text-xl">Notification Preferences</CardTitle>
+              <CardDescription className="text-sm sm:text-base">Manage how you receive notifications</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-lg border">
-                <div>
-                  <h4 className="font-semibold">Transaction Alerts</h4>
-                  <p className="text-sm text-muted-foreground">
+            <CardContent className="p-4 sm:p-6 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 rounded-lg border">
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-sm sm:text-base">Transaction Alerts</h4>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Get notified of all transactions
                   </p>
                 </div>
-                <Badge variant="success">Enabled</Badge>
+                <Badge variant="success" className="text-xs w-fit">Enabled</Badge>
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-lg border">
-                <div>
-                  <h4 className="font-semibold">Investment Updates</h4>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 rounded-lg border">
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-sm sm:text-base">Investment Updates</h4>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Receive updates on your investments
                   </p>
                 </div>
-                <Badge variant="success">Enabled</Badge>
+                <Badge variant="success" className="text-xs w-fit">Enabled</Badge>
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-lg border">
-                <div>
-                  <h4 className="font-semibold">Marketing Emails</h4>
-                  <p className="text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 rounded-lg border">
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-sm sm:text-base">Marketing Emails</h4>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Promotional offers and news
                   </p>
                 </div>
-                <Badge>Disabled</Badge>
+                <Badge className="text-xs w-fit">Disabled</Badge>
               </div>
 
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground pt-2">
                 Advanced notification preferences coming soon
               </p>
             </CardContent>

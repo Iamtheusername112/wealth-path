@@ -13,6 +13,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.12.3",
     "@radix-ui/react-checkbox": "^1.3.3",
+    "@radix-ui/react-dialog": "^1.1.15",
     "@supabase/supabase-js": "^2.75.1",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",

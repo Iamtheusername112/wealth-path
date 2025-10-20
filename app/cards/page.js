@@ -27,10 +27,10 @@ export default async function CardsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Credit Cards</h1>
-        <p className="text-muted-foreground">
+    <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12 pb-20 sm:pb-8">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Credit Cards</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">
           Manage your premium CapitalPath credit cards
         </p>
       </div>

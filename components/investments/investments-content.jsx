@@ -86,62 +86,65 @@ export function InvestmentsContent({ user, investments }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Investment Portfolio</h1>
-        <p className="text-muted-foreground">Grow your wealth with diverse investment opportunities</p>
+    <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12 pb-20 sm:pb-8">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Investment Portfolio</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Grow your wealth with diverse investment opportunities</p>
       </div>
 
       {/* Portfolio Stats */}
-      <div className="grid md:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Total Invested</CardDescription>
-            <CardTitle className="text-2xl">{formatCurrency(totalInvested)}</CardTitle>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <Card className="shadow-lg shadow-black/10">
+          <CardHeader className="pb-2 p-4 sm:p-6">
+            <CardDescription className="text-sm sm:text-base">Total Invested</CardDescription>
+            <CardTitle className="text-xl sm:text-2xl">{formatCurrency(totalInvested)}</CardTitle>
           </CardHeader>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Portfolio Value</CardDescription>
-            <CardTitle className="text-2xl text-green-600">
+        <Card className="shadow-lg shadow-black/10">
+          <CardHeader className="pb-2 p-4 sm:p-6">
+            <CardDescription className="text-sm sm:text-base">Portfolio Value</CardDescription>
+            <CardTitle className="text-xl sm:text-2xl text-green-600">
               {formatCurrency(portfolioValue)}
             </CardTitle>
           </CardHeader>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Total Return</CardDescription>
-            <CardTitle className={`text-2xl ${portfolioChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+        <Card className="shadow-lg shadow-black/10">
+          <CardHeader className="pb-2 p-4 sm:p-6">
+            <CardDescription className="text-sm sm:text-base">Total Return</CardDescription>
+            <CardTitle className={`text-xl sm:text-2xl ${portfolioChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               {portfolioChange >= 0 ? '+' : ''}{formatCurrency(portfolioChange)}
             </CardTitle>
           </CardHeader>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Active Positions</CardDescription>
-            <CardTitle className="text-2xl">{activeInvestments}</CardTitle>
+        <Card className="shadow-lg shadow-black/10">
+          <CardHeader className="pb-2 p-4 sm:p-6">
+            <CardDescription className="text-sm sm:text-base">Active Positions</CardDescription>
+            <CardTitle className="text-xl sm:text-2xl">{activeInvestments}</CardTitle>
           </CardHeader>
         </Card>
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="w-full justify-start">
-          <TabsTrigger value="overview" active={activeTab === "overview"}>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
+        <TabsList className="w-full justify-start overflow-x-auto">
+          <TabsTrigger value="overview" active={activeTab === "overview"} className="flex-shrink-0">
             <PieChart className="h-4 w-4 mr-2" />
-            Overview
+            <span className="hidden sm:inline">Overview</span>
+            <span className="sm:hidden">Overview</span>
           </TabsTrigger>
           {categories.map(category => (
             <TabsTrigger 
               key={category.id} 
               value={category.id}
               active={activeTab === category.id}
+              className="flex-shrink-0"
             >
               <category.icon className={`h-4 w-4 mr-2 ${category.color}`} />
-              {category.name}
+              <span className="hidden sm:inline">{category.name}</span>
+              <span className="sm:hidden">{category.name.split(' ')[0]}</span>
             </TabsTrigger>
           ))}
         </TabsList>

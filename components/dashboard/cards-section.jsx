@@ -63,16 +63,16 @@ export function CardsSection({ userId, user }) {
   }
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <Card className="shadow-lg shadow-black/10">
+        <CardHeader className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <CreditCard className="h-5 w-5 text-gold-600" />
                 My Credit Cards
               </CardTitle>
-              <CardDescription>Manage your premium credit cards</CardDescription>
+              <CardDescription className="text-sm sm:text-base">Manage your premium credit cards</CardDescription>
             </div>
             {!hasCard && !hasPendingRequest && (
               <Button 
@@ -80,6 +80,7 @@ export function CardsSection({ userId, user }) {
                 onClick={() => setRequestModalOpen(true)}
                 disabled={!isAccountActive}
                 title={!isAccountActive ? "Account deactivated - contact support" : ""}
+                className="w-full sm:w-auto"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Request Card
@@ -87,9 +88,9 @@ export function CardsSection({ userId, user }) {
             )}
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6">
           {hasPendingRequest && (
-            <div className="mb-6 rounded-lg border border-yellow-600/20 bg-yellow-50 dark:bg-yellow-950/10 p-4">
+            <div className="mb-4 sm:mb-6 rounded-lg border border-yellow-600/20 bg-yellow-50 dark:bg-yellow-950/10 p-3 sm:p-4">
               <div className="flex items-start gap-3">
                 <Clock className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
@@ -111,18 +112,18 @@ export function CardsSection({ userId, user }) {
           )}
 
           {hasCard ? (
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-4 sm:gap-6">
               {cards.map((card) => (
                 <CreditCardDisplay key={card.id} card={card} />
               ))}
             </div>
           ) : !hasPendingRequest ? (
-            <div className="text-center py-12">
+            <div className="text-center py-8 sm:py-12 px-4">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold-100 dark:bg-gold-950/20 mb-4">
                 <CreditCard className="h-8 w-8 text-gold-600" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">No Credit Cards Yet</h3>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              <h3 className="text-base sm:text-lg font-semibold mb-2">No Credit Cards Yet</h3>
+              <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 max-w-md mx-auto">
                 Request a premium CapitalPath credit card to enjoy exclusive benefits, 
                 rewards, and a sleek metal card design.
               </p>
@@ -132,6 +133,7 @@ export function CardsSection({ userId, user }) {
                 onClick={() => setRequestModalOpen(true)}
                 disabled={!isAccountActive}
                 title={!isAccountActive ? "Account deactivated - contact support" : ""}
+                className="w-full sm:w-auto"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 Request Your First Card

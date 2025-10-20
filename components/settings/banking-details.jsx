@@ -81,54 +81,54 @@ export function BankingDetails({ user }) {
   const hasCredentials = user?.account_number
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
+    <Card className="shadow-lg shadow-black/10">
+      <CardHeader className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-6 w-6 text-gold-600" />
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+              <Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-gold-600" />
               Banking Details
             </CardTitle>
-            <CardDescription>Your CapitalPath account information for transfers</CardDescription>
+            <CardDescription className="text-sm sm:text-base">Your CapitalPath account information for transfers</CardDescription>
           </div>
           {hasCredentials && (
-            <div className="px-3 py-1 bg-green-100 dark:bg-green-950/30 border border-green-300 dark:border-green-800 rounded-full">
+            <div className="px-3 py-1 bg-green-100 dark:bg-green-950/30 border border-green-300 dark:border-green-800 rounded-full w-fit">
               <p className="text-xs font-semibold text-green-700 dark:text-green-400">✓ Active</p>
             </div>
           )}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 sm:p-6">
         {hasCredentials ? (
           <div className="space-y-4">
             {/* Info Banner */}
-            <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <p className="text-sm text-blue-900 dark:text-blue-100">
+            <div className="p-3 sm:p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <p className="text-xs sm:text-sm text-blue-900 dark:text-blue-100">
                 <strong>Share these details</strong> to receive money from external banks or other financial institutions.
               </p>
             </div>
 
             {/* Banking Credentials Grid */}
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {bankingFields.map((field) => (
                 field.value && (
                   <div
                     key={field.key}
-                    className="p-4 rounded-lg border-2 hover:border-gold-600/50 transition-all bg-gradient-to-br from-card to-muted/30 group"
+                    className="p-3 sm:p-4 rounded-lg border-2 hover:border-gold-600/50 transition-all bg-gradient-to-br from-card to-muted/30 group"
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">{field.icon}</span>
-                        <div>
-                          <p className="text-xs text-muted-foreground">{field.label}</p>
+                    <div className="flex items-start justify-between mb-2 gap-2">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <span className="text-lg sm:text-xl flex-shrink-0">{field.icon}</span>
+                        <div className="min-w-0">
+                          <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{field.label}</p>
                           {field.description && (
-                            <p className="text-[10px] text-muted-foreground italic">{field.description}</p>
+                            <p className="text-[9px] sm:text-[10px] text-muted-foreground italic hidden sm:block">{field.description}</p>
                           )}
                         </div>
                       </div>
                       <button
                         onClick={() => copyToClipboard(field.value, field.label)}
-                        className="p-1.5 rounded hover:bg-accent transition-colors"
+                        className="p-1.5 rounded hover:bg-accent transition-colors flex-shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center"
                         title="Click to copy"
                       >
                         {copiedField === field.label ? (
@@ -138,7 +138,7 @@ export function BankingDetails({ user }) {
                         )}
                       </button>
                     </div>
-                    <p className={`font-semibold ${field.key === 'account_number' || field.key === 'iban' || field.key === 'swift_code' ? 'font-mono text-base' : 'text-sm'} ${field.key === 'account_number' ? 'text-gold-600 text-lg' : ''}`}>
+                    <p className={`font-semibold truncate ${field.key === 'account_number' || field.key === 'iban' || field.key === 'swift_code' ? 'font-mono text-sm sm:text-base' : 'text-xs sm:text-sm'} ${field.key === 'account_number' ? 'text-gold-600 text-base sm:text-lg' : ''}`}>
                       {field.value}
                     </p>
                   </div>
@@ -147,34 +147,34 @@ export function BankingDetails({ user }) {
             </div>
 
             {/* Wire Transfer Instructions */}
-            <div className="mt-6 p-5 bg-gradient-to-br from-navy-50 to-gold-50 dark:from-navy-950/20 dark:to-gold-950/20 border-2 border-gold-600/20 rounded-lg">
-              <h4 className="font-semibold text-base mb-3 flex items-center gap-2">
-                <Building2 className="h-5 w-5 text-gold-600" />
+            <div className="mt-4 sm:mt-6 p-4 sm:p-5 bg-gradient-to-br from-navy-50 to-gold-50 dark:from-navy-950/20 dark:to-gold-950/20 border-2 border-gold-600/20 rounded-lg">
+              <h4 className="font-semibold text-sm sm:text-base mb-3 flex items-center gap-2">
+                <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-gold-600" />
                 Wire Transfer Instructions
               </h4>
-              <div className="space-y-2 text-sm">
-                <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-2 text-xs sm:text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <p className="text-muted-foreground">Bank Name:</p>
-                  <p className="font-semibold">CapitalPath Financial</p>
+                  <p className="font-semibold truncate">CapitalPath Financial</p>
                   
                   <p className="text-muted-foreground">Account Name:</p>
-                  <p className="font-semibold">{user?.full_name || user?.email}</p>
+                  <p className="font-semibold truncate">{user?.full_name || user?.email}</p>
                   
                   <p className="text-muted-foreground">Account Number:</p>
-                  <p className="font-mono font-bold text-gold-600">{user?.account_number}</p>
+                  <p className="font-mono font-bold text-gold-600 truncate">{user?.account_number}</p>
                   
                   <p className="text-muted-foreground">SWIFT Code:</p>
-                  <p className="font-mono font-semibold">{user?.swift_code}</p>
+                  <p className="font-mono font-semibold truncate">{user?.swift_code}</p>
                   
                   <p className="text-muted-foreground">Routing Number:</p>
-                  <p className="font-mono font-semibold">{user?.routing_number}</p>
+                  <p className="font-mono font-semibold truncate">{user?.routing_number}</p>
                 </div>
               </div>
             </div>
 
             {/* Security Note */}
             <div className="p-3 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-              <p className="text-xs text-yellow-900 dark:text-yellow-100">
+              <p className="text-[10px] sm:text-xs text-yellow-900 dark:text-yellow-100">
                 ⚠️ <strong>Security:</strong> Never share these details via unsecured channels. Always verify the recipient before sharing banking information.
               </p>
             </div>

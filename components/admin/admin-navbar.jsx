@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Building2, LogOut, Shield, Bell, Settings, CreditCard, FileCheck, DollarSign, MessageSquare } from "lucide-react"
+import { Building2, LogOut, Shield, Bell, Settings, CreditCard, FileCheck, DollarSign, MessageSquare, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Badge } from "@/components/ui/badge"
@@ -16,9 +16,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Sheet,
+  SheetContent,
+} from "@/components/ui/sheet"
 
 export function AdminNavbar({ pendingKYC: initialPendingKYC = 0, pendingDeposits: initialPendingDeposits = 0, pendingCardRequests: initialPendingCardRequests = 0 }) {
   const router = useRouter()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [notificationOpen, setNotificationOpen] = useState(false)
   const [pendingKYC, setPendingKYC] = useState(initialPendingKYC)
   const [pendingDeposits, setPendingDeposits] = useState(initialPendingDeposits)
@@ -271,17 +276,188 @@ export function AdminNavbar({ pendingKYC: initialPendingKYC = 0, pendingDeposits
 
             <ThemeToggle />
             
-            {/* Logout Button */}
+            {/* Logout Button - Desktop */}
             <Button 
               variant="outline" 
               onClick={handleLogout}
-              className="bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-white/40 gap-2"
+              className="hidden md:flex bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-white/40 gap-2"
             >
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Logout</span>
             </Button>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden text-white hover:bg-white/10"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
           </div>
         </div>
+
+        {/* Mobile Menu using Shadcn UI Sheet */}
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetContent side="right" className="w-[85%] max-w-sm p-0 bg-navy-900 border-white/10">
+            <div className="flex flex-col h-full">
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <h2 className="text-lg font-bold text-white">Admin Menu</h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="h-8 w-8 text-white hover:bg-white/10"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+
+              {/* Menu Content */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {/* Admin Info */}
+                <div className="pb-6 border-b border-white/10">
+                  <div className="flex items-center gap-3 bg-white/5 backdrop-blur px-4 py-3 rounded-lg">
+                    <Shield className="h-5 w-5 text-gold-400" />
+                    <div>
+                      <p className="text-sm font-medium text-white">Administrator</p>
+                      <p className="text-xs text-white/60">Full Access</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Stats */}
+                <div className="space-y-3">
+                  <p className="text-xs font-medium text-white/60 uppercase tracking-wider">Pending Actions</p>
+                  
+                  {totalPending > 0 ? (
+                    <>
+                      {openSupportTickets > 0 && (
+                        <button
+                          onClick={() => {
+                            handleNavigation('/admin?tab=support')
+                            setMobileMenuOpen(false)
+                          }}
+                          className="w-full flex items-center justify-between p-3 rounded-lg bg-red-600/10 border border-red-600/20 hover:bg-red-600/20 transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-red-600/20 flex items-center justify-center">
+                              <MessageSquare className="h-5 w-5 text-red-400" />
+                            </div>
+                            <div className="text-left">
+                              <p className="text-sm font-medium text-white">Support Tickets</p>
+                              <p className="text-xs text-white/60">{openSupportTickets} need attention</p>
+                            </div>
+                          </div>
+                          <Badge variant="destructive">{openSupportTickets}</Badge>
+                        </button>
+                      )}
+
+                      {pendingCardRequests > 0 && (
+                        <button
+                          onClick={() => {
+                            handleNavigation('/admin?tab=cards')
+                            setMobileMenuOpen(false)
+                          }}
+                          className="w-full flex items-center justify-between p-3 rounded-lg bg-gold-600/10 border border-gold-600/20 hover:bg-gold-600/20 transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-gold-600/20 flex items-center justify-center">
+                              <CreditCard className="h-5 w-5 text-gold-400" />
+                            </div>
+                            <div className="text-left">
+                              <p className="text-sm font-medium text-white">Card Requests</p>
+                              <p className="text-xs text-white/60">{pendingCardRequests} awaiting approval</p>
+                            </div>
+                          </div>
+                          <Badge className="bg-gold-600">{pendingCardRequests}</Badge>
+                        </button>
+                      )}
+
+                      {pendingKYC > 0 && (
+                        <button
+                          onClick={() => {
+                            handleNavigation('/admin?tab=kyc')
+                            setMobileMenuOpen(false)
+                          }}
+                          className="w-full flex items-center justify-between p-3 rounded-lg bg-yellow-600/10 border border-yellow-600/20 hover:bg-yellow-600/20 transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-yellow-600/20 flex items-center justify-center">
+                              <FileCheck className="h-5 w-5 text-yellow-400" />
+                            </div>
+                            <div className="text-left">
+                              <p className="text-sm font-medium text-white">KYC Verifications</p>
+                              <p className="text-xs text-white/60">{pendingKYC} pending</p>
+                            </div>
+                          </div>
+                          <Badge variant="warning">{pendingKYC}</Badge>
+                        </button>
+                      )}
+
+                      {pendingDeposits > 0 && (
+                        <button
+                          onClick={() => {
+                            handleNavigation('/admin?tab=deposits')
+                            setMobileMenuOpen(false)
+                          }}
+                          className="w-full flex items-center justify-between p-3 rounded-lg bg-green-600/10 border border-green-600/20 hover:bg-green-600/20 transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-green-600/20 flex items-center justify-center">
+                              <DollarSign className="h-5 w-5 text-green-400" />
+                            </div>
+                            <div className="text-left">
+                              <p className="text-sm font-medium text-white">Deposit Requests</p>
+                              <p className="text-xs text-white/60">{pendingDeposits} to review</p>
+                            </div>
+                          </div>
+                          <Badge variant="success">{pendingDeposits}</Badge>
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <div className="py-6 text-center">
+                      <Bell className="h-10 w-10 mx-auto mb-2 text-white/30" />
+                      <p className="text-sm text-white/60">All caught up! 🎉</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Navigation Links */}
+                <div className="pt-6 border-t border-white/10 space-y-2">
+                  <button
+                    onClick={() => {
+                      handleNavigation('/admin')
+                      setMobileMenuOpen(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
+                  >
+                    <Shield className="h-5 w-5 text-gold-400" />
+                    <span className="text-sm font-medium">Dashboard</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      handleLogout()
+                      setMobileMenuOpen(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-600/10 transition-colors"
+                  >
+                    <LogOut className="h-5 w-5" />
+                    <span className="text-sm font-medium">Logout</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </nav>
   )

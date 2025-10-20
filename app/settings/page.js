@@ -11,56 +11,34 @@ export default async function SettingsPage() {
   if (!clerkUser) {
     redirect("/sign-in")
   }
-  
+
   const user = serializeUser(clerkUser)
 
-  // Fetch user data from database (use admin client)
+  // Get user data from database
   const { data: dbUser } = await supabaseAdmin
     .from('users')
     .select('*')
     .eq('id', clerkUser.id)
     .single()
 
-  // Generate signed URL for profile image
-  let profileImageUrl = dbUser?.profile_image_url
-  if (profileImageUrl) {
-    try {
-      let filePath = profileImageUrl
-      if (profileImageUrl.includes('/storage/v1/object/')) {
-        const match = profileImageUrl.match(/\/kyc-documents\/(.+)/)
-        if (match) {
-          filePath = match[1].split('?')[0]
-        }
-      }
-
-      const { data, error } = await supabaseAdmin.storage
-        .from('kyc-documents')
-        .createSignedUrl(filePath, 3600)
-
-      if (!error && data) {
-        profileImageUrl = data.signedUrl
-      }
-    } catch (error) {
-      console.error('Error generating signed URL for profile image:', error)
-    }
-  }
-
-  // Merge database user data with Clerk user
-  const mergedUser = {
-    ...user,
-    ...dbUser,
-    profileImageUrl: profileImageUrl || user.profileImageUrl,
-    imageUrl: profileImageUrl || user.imageUrl,
+  if (!dbUser || dbUser.kyc_status !== 'approved') {
+    redirect('/kyc')
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar user={mergedUser} />
-      <SettingsContent 
-        user={mergedUser}
-        clerkUser={user}
-      />
+      <Navbar user={{ ...user, ...dbUser }} />
+      
+      <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12 pb-20 sm:pb-8">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Settings</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Manage your CapitalPath account settings
+          </p>
+        </div>
+        
+        <SettingsContent user={{ ...user, ...dbUser }} />
+      </div>
     </div>
   )
 }
-

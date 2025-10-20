@@ -4,17 +4,10 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
 
 export async function GET(request) {
   try {
-    const { userId: authUserId } = await auth()
+    const { userId } = await auth()
 
-    if (!authUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
-    const { searchParams } = new URL(request.url)
-    const userId = searchParams.get('userId')
-
-    if (userId !== authUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    if (!userId) {
+      return NextResponse.json({ success: false, error: "Unauthorized", count: 0 }, { status: 401 })
     }
 
     // Count unread notifications
@@ -26,13 +19,13 @@ export async function GET(request) {
 
     if (error) {
       console.error('Unread count error:', error)
-      return NextResponse.json({ count: 0 })
+      return NextResponse.json({ success: true, count: 0 })
     }
 
-    return NextResponse.json({ count: count || 0 })
+    return NextResponse.json({ success: true, count: count || 0 })
   } catch (error) {
     console.error('Unread count error:', error)
-    return NextResponse.json({ count: 0 })
+    return NextResponse.json({ success: true, count: 0 })
   }
 }
 

@@ -17,6 +17,16 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "CapitalPath - Premium Banking & Investment Platform",
   description: "Secure banking and investment platform for modern investors",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" }
+  ],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "CapitalPath"
+  }
 }
 
 export default function RootLayout({ children }) {

@@ -1,15 +1,16 @@
 "use client"
 
+import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Building2, Menu, X, Bell, CheckCircle2, Clock, DollarSign, CreditCard, TrendingUp } from "lucide-react"
+import { Building2, Menu, X, Bell, CheckCircle2, Clock, DollarSign, CreditCard, TrendingUp, Settings, LogOut } from "lucide-react"
 import { Button } from "./ui/button"
 import { ThemeToggle } from "./theme-toggle"
 import { UserMenu } from "./user-menu"
 import { Badge } from "./ui/badge"
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
-import { SignInButton, SignUpButton } from "@clerk/nextjs"
+import { SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
+import { MobileNav } from "@/components/mobile-nav"
 
 export function Navbar({ user }) {
   const pathname = usePathname()
@@ -30,21 +38,30 @@ export function Navbar({ user }) {
     try {
       // Fetch unread count
       const countResponse = await fetch('/api/notifications/unread-count')
-      const countData = await countResponse.json()
-      if (countData.success) {
-        setUnreadCount(countData.count || 0)
+      if (countResponse.ok) {
+        const countData = await countResponse.json()
+        if (countData.success) {
+          setUnreadCount(countData.count || 0)
+        }
+      } else {
+        console.warn('Failed to fetch notification count:', countResponse.status)
       }
 
-      // Fetch recent notifications (we'll need to create this endpoint)
+      // Fetch recent notifications
       const notifResponse = await fetch('/api/notifications/recent')
       if (notifResponse.ok) {
         const notifData = await notifResponse.json()
         if (notifData.success) {
           setNotifications(notifData.notifications || [])
         }
+      } else {
+        console.warn('Failed to fetch notifications:', notifResponse.status)
       }
     } catch (error) {
       console.error('Error fetching notifications:', error)
+      // Set defaults on error to prevent UI issues
+      setUnreadCount(0)
+      setNotifications([])
     }
   }
 
@@ -96,60 +113,61 @@ export function Navbar({ user }) {
     : []
 
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2">
-              <Building2 className="h-8 w-8 text-gold-600" />
-              <span className="text-xl font-bold bg-gradient-to-r from-navy-700 to-gold-600 bg-clip-text text-transparent">
-                CapitalPath
-              </span>
-            </Link>
+    <React.Fragment>
+      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 safe-area-top">
+        <div className="container mx-auto px-4">
+          <div className="flex h-14 sm:h-16 items-center justify-between">
+            <div className="flex items-center gap-4 sm:gap-8">
+              <Link href="/" className="flex items-center gap-2">
+                <Building2 className="h-6 w-6 sm:h-8 sm:w-8 text-gold-600" />
+                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-navy-700 to-gold-600 bg-clip-text text-transparent">
+                  CapitalPath
+                </span>
+              </Link>
 
-            {user && (
-              <div className="hidden md:flex items-center gap-6">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "text-sm font-medium transition-colors hover:text-gold-600",
-                      pathname === item.href
-                        ? "text-gold-600"
-                        : "text-muted-foreground"
-                    )}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            
-            {user ? (
-              <div className="flex items-center gap-3">
-                {/* Notification Bell Dropdown */}
-                <DropdownMenu open={notificationOpen} onOpenChange={setNotificationOpen}>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="relative"
-                    >
-                      <Bell className={`h-5 w-5 text-muted-foreground hover:text-gold-600 transition-colors ${unreadCount > 0 ? 'animate-bell-ring' : ''}`} />
-                      {unreadCount > 0 && (
-                        <Badge 
-                          className="absolute -top-1 -right-1 h-5 min-w-[20px] flex items-center justify-center bg-red-500 text-white text-xs px-1 animate-pulse"
-                        >
-                          {unreadCount > 99 ? '99+' : unreadCount}
-                        </Badge>
+              {user && (
+                <div className="hidden md:flex items-center gap-6">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        "text-sm font-medium transition-colors hover:text-gold-600",
+                        pathname === item.href
+                          ? "text-gold-600"
+                          : "text-muted-foreground"
                       )}
-                    </Button>
-                  </DropdownMenuTrigger>
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-4">
+              <ThemeToggle />
+              
+              {user ? (
+                <div className="flex items-center gap-2 sm:gap-3">
+                  {/* Notification Bell Dropdown - Desktop Only */}
+                  <DropdownMenu open={notificationOpen} onOpenChange={setNotificationOpen}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="relative hidden md:flex h-9 w-9"
+                      >
+                        <Bell className={`h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground hover:text-gold-600 transition-colors ${unreadCount > 0 ? 'animate-bell-ring' : ''}`} />
+                        {unreadCount > 0 && (
+                          <Badge 
+                            className="absolute -top-1 -right-1 h-4 min-w-[16px] flex items-center justify-center bg-red-500 text-white text-xs px-1 animate-pulse"
+                          >
+                            {unreadCount > 99 ? '99+' : unreadCount}
+                          </Badge>
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-80">
                     <DropdownMenuLabel className="flex items-center justify-between">
                       <span>Notifications</span>
@@ -222,80 +240,175 @@ export function Navbar({ user }) {
                   }
                 `}</style>
                 
-                <span className="hidden md:block text-sm text-muted-foreground">
-                  {user?.full_name || user?.email}
-                </span>
-                <UserMenu user={user} />
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <SignInButton mode="modal">
-                  <Button variant="ghost">Login</Button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <Button variant="gold">Get Started</Button>
-                </SignUpButton>
-              </div>
-            )}
+                  <span className="hidden md:block text-sm text-muted-foreground">
+                    {user?.full_name || user?.email}
+                  </span>
+                  <div className="hidden md:block">
+                    <UserMenu user={user} />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <SignInButton mode="modal">
+                    <Button variant="ghost" size="sm" className="hidden sm:flex">Login</Button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <Button variant="gold" size="sm">Get Started</Button>
+                  </SignUpButton>
+                </div>
+              )}
 
-            {user && (
-              <div className="flex items-center gap-2 md:hidden">
-                <button
-                  className="p-2"
+              {user && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden h-9 w-9"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
                   {mobileMenuOpen ? (
-                    <X className="h-6 w-6" />
+                    <X className="h-5 w-5" />
                   ) : (
-                    <Menu className="h-6 w-6" />
+                    <Menu className="h-5 w-5" />
                   )}
-                </button>
-              </div>
-            )}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-
-        {mobileMenuOpen && user && (
-          <div className="md:hidden py-4 space-y-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "block px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-between",
-                  pathname === item.href
-                    ? "bg-gold-100 text-gold-900 dark:bg-gold-900 dark:text-gold-100"
-                    : "hover:bg-accent"
-                )}
+      </nav>
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetContent side="right" className="w-[85%] max-w-sm p-0">
+          <SheetHeader className="p-4 sm:p-6 border-b safe-area-top">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-lg font-bold">Menu</SheetTitle>
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setMobileMenuOpen(false)}
+                className="h-8 w-8"
               >
-                {item.label}
-              </Link>
-            ))}
-            <Link
-              href="/notifications"
-              className={cn(
-                "block px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-between",
-                pathname === "/notifications"
-                  ? "bg-gold-100 text-gold-900 dark:bg-gold-900 dark:text-gold-100"
-                  : "hover:bg-accent"
-              )}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span className="flex items-center gap-2">
-                <Bell className="h-4 w-4" />
-                Notifications
-              </span>
-              {unreadCount > 0 && (
-                <Badge variant="destructive" className="ml-auto">
-                  {unreadCount}
-                </Badge>
-              )}
-            </Link>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </SheetHeader>
+          <div className="flex flex-col h-full">
+
+            {/* Menu Content */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+              {/* User Profile */}
+              <div className="mb-6 pb-6 border-b">
+                <div className="flex items-center gap-3">
+                  {(user.profileImageUrl || user.profile_image_url || user.imageUrl) && (
+                    <img 
+                      src={user.profileImageUrl || user.profile_image_url || user.imageUrl} 
+                      alt={user.full_name || 'User'}
+                      className="w-12 h-12 rounded-full object-cover border-2 border-gold-600"
+                    />
+                  )}
+                  <div>
+                    <p className="font-semibold">{user.full_name || 'User'}</p>
+                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="space-y-1 mb-6">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 min-h-[44px] min-w-[44px]",
+                      pathname === item.href
+                        ? "bg-gradient-to-r from-yellow-600 to-yellow-700 text-white shadow-lg"
+                        : "hover:bg-accent hover:translate-x-1"
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Notifications */}
+              <div className="mb-6">
+                <Link
+                  href="/notifications"
+                  className={cn(
+                    "block px-4 py-3 rounded-lg text-base font-medium transition-all flex items-center justify-between",
+                    pathname === "/notifications"
+                      ? "bg-gradient-to-r from-yellow-600 to-yellow-700 text-white shadow-lg"
+                      : "hover:bg-accent"
+                  )}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="flex items-center gap-2">
+                    <Bell className="h-5 w-5" />
+                    Notifications
+                  </span>
+                  {unreadCount > 0 && (
+                    <Badge variant="destructive" className="animate-pulse">
+                      {unreadCount}
+                    </Badge>
+                  )}
+                </Link>
+
+                {/* Recent Notifications Preview */}
+                {notifications.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {notifications.slice(0, 3).map((notification) => {
+                      const Icon = getNotificationIcon(notification.message)
+                      return (
+                        <div
+                          key={notification.id}
+                          className={cn(
+                            "px-3 py-2 rounded-md text-xs cursor-pointer transition-colors",
+                            !notification.is_read ? 'bg-blue-50 dark:bg-blue-950/20' : 'bg-muted/50'
+                          )}
+                          onClick={() => {
+                            handleNotificationClick(notification.id)
+                            setMobileMenuOpen(false)
+                          }}
+                        >
+                          <div className="flex items-start gap-2">
+                            <Icon className="h-3 w-3 mt-0.5 text-gold-600" />
+                            <p className="flex-1 line-clamp-2">{notification.message}</p>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Settings & Logout */}
+              <div className="pt-6 border-t space-y-2 safe-area-bottom">
+                <Link
+                  href="/settings"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium hover:bg-accent transition-all duration-200 min-h-[44px] min-w-[44px]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Settings className="h-5 w-5 text-yellow-600" />
+                  <span>Settings</span>
+                </Link>
+                
+                <SignOutButton>
+                  <button
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all duration-200 min-h-[44px] min-w-[44px]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <LogOut className="h-5 w-5" />
+                    <span>Log Out</span>
+                  </button>
+                </SignOutButton>
+              </div>
+            </div>
           </div>
-        )}
-      </div>
-    </nav>
+        </SheetContent>
+      </Sheet>
+      {user && <MobileNav user={user} unreadCount={unreadCount} />}
+    </React.Fragment>
   )
 }
 

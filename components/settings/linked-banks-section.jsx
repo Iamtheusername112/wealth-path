@@ -76,42 +76,44 @@ export function LinkedBanksSection({ userId }) {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
+      <Card className="shadow-lg shadow-black/10">
+        <CardHeader className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <CardTitle className="flex items-center gap-2">
-                <Building2 className="h-6 w-6 text-gold-600" />
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                <Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-gold-600" />
                 Linked Bank Accounts
               </CardTitle>
-              <CardDescription>Manage your connected bank accounts for transfers</CardDescription>
+              <CardDescription className="text-sm sm:text-base">Manage your connected bank accounts for transfers</CardDescription>
             </div>
             <Button
               onClick={() => setLinkBankModalOpen(true)}
               variant="outline"
-              className="gap-2"
+              className="gap-2 w-full sm:w-auto flex-shrink-0"
+              size="sm"
             >
               <Plus className="h-4 w-4" />
-              Link Bank Account
+              <span className="hidden sm:inline">Link Bank Account</span>
+              <span className="sm:hidden">Link Account</span>
             </Button>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6">
           {loading ? (
             <div className="text-center py-12">
               <Loader2 className="h-8 w-8 animate-spin mx-auto text-gold-600 mb-2" />
               <p className="text-sm text-muted-foreground">Loading linked accounts...</p>
             </div>
           ) : linkedBanks.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-3 sm:space-y-4">
               {linkedBanks.map((bank) => (
                 <div
                   key={bank.id}
-                  className="p-4 rounded-lg border-2 transition-all bg-card hover:border-gold-600/50"
+                  className="p-3 sm:p-4 rounded-lg border-2 transition-all bg-card hover:border-gold-600/50"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-4">
-                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-navy-600 to-navy-800 flex items-center justify-center text-2xl flex-shrink-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+                    <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-navy-600 to-navy-800 flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
                         {bank.bank_country === "United States" ? "🏦" : 
                          bank.bank_country === "United Kingdom" ? "🏛️" :
                          bank.bank_country === "Canada" ? "🍁" :
@@ -120,38 +122,38 @@ export function LinkedBanksSection({ userId }) {
                          bank.bank_country === "Germany" ? "🇩🇪" :
                          bank.bank_country === "France" ? "🇫🇷" : "🏢"}
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="font-semibold text-lg">{bank.bank_name}</p>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <p className="font-semibold text-base sm:text-lg truncate">{bank.bank_name}</p>
                           {bank.is_primary && (
-                            <Badge variant="default" className="text-xs">Primary</Badge>
+                            <Badge variant="default" className="text-[10px] sm:text-xs flex-shrink-0">Primary</Badge>
                           )}
                           {bank.is_verified && (
-                            <Badge variant="success" className="text-xs gap-1">
+                            <Badge variant="success" className="text-[10px] sm:text-xs gap-1 flex-shrink-0">
                               <Check className="h-3 w-3" />
                               Verified
                             </Badge>
                           )}
                         </div>
-                        <div className="space-y-1 text-sm text-muted-foreground">
-                          <p>
+                        <div className="space-y-1 text-xs sm:text-sm text-muted-foreground">
+                          <p className="truncate">
                             {bank.account_type.charAt(0).toUpperCase() + bank.account_type.slice(1)} Account • ****{bank.account_number_last4}
                           </p>
-                          <p className="flex items-center gap-2">
+                          <p className="flex flex-wrap items-center gap-2">
                             <span>{bank.bank_country}</span>
                             <span>•</span>
                             <span>{bank.currency}</span>
                           </p>
-                          <p className="text-xs">
+                          <p className="text-[10px] sm:text-xs truncate">
                             Account Holder: {bank.account_holder_name}
                           </p>
                           {bank.routing_number && (
-                            <p className="text-xs">
+                            <p className="text-[10px] sm:text-xs truncate">
                               Routing: {bank.routing_number}
                             </p>
                           )}
                           {bank.iban && (
-                            <p className="text-xs font-mono">
+                            <p className="text-[10px] sm:text-xs font-mono truncate">
                               IBAN: {bank.iban}
                             </p>
                           )}
@@ -163,17 +165,19 @@ export function LinkedBanksSection({ userId }) {
                       size="sm"
                       onClick={() => handleRemoveClick(bank)}
                       disabled={removing === bank.id}
-                      className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-950 gap-2"
+                      className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-950 gap-2 w-full sm:w-auto flex-shrink-0"
                     >
                       {removing === bank.id ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Removing...
+                          <span className="hidden sm:inline">Removing...</span>
+                          <span className="sm:hidden">Removing...</span>
                         </>
                       ) : (
                         <>
                           <Trash2 className="h-4 w-4" />
-                          Remove
+                          <span className="hidden sm:inline">Remove</span>
+                          <span className="sm:hidden">Remove</span>
                         </>
                       )}
                     </Button>
@@ -200,8 +204,8 @@ export function LinkedBanksSection({ userId }) {
           )}
 
           {linkedBanks.length > 0 && (
-            <div className="mt-6 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-4 rounded-lg">
-              <p className="text-xs text-blue-900 dark:text-blue-100 flex items-start gap-2">
+            <div className="mt-4 sm:mt-6 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-3 sm:p-4 rounded-lg">
+              <p className="text-[10px] sm:text-xs text-blue-900 dark:text-blue-100 flex items-start gap-2">
                 <Shield className="h-4 w-4 text-blue-600 flex-shrink-0 mt-0.5" />
                 <span>
                   <strong>Security Note:</strong> Removing a bank account will prevent future transfers from that account. Past transactions remain in your history.

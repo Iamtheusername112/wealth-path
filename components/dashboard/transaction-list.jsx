@@ -30,34 +30,34 @@ export function TransactionList({ transactions }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {transactions.map((transaction) => (
         <div 
           key={transaction.id} 
-          className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors"
+          className="flex items-center justify-between p-3 sm:p-4 rounded-xl border hover:bg-accent/50 transition-all duration-200 shadow-lg shadow-black/10"
         >
-          <div className="flex items-center gap-4">
-            <div className="p-2 rounded-full bg-accent">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+            <div className="p-2 rounded-full bg-accent flex-shrink-0">
               {getTransactionIcon(transaction.type)}
             </div>
-            <div>
-              <p className="font-medium capitalize">{transaction.type}</p>
-              <p className="text-sm text-muted-foreground">
+            <div className="min-w-0 flex-1">
+              <p className="font-medium capitalize text-sm sm:text-base truncate">{transaction.type}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {formatDateTime(transaction.created_at)}
               </p>
               {transaction.description && (
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                   {transaction.description}
                 </p>
               )}
             </div>
           </div>
-          <div className="text-right">
-            <p className={`font-semibold ${getTransactionColor(transaction.type)}`}>
+          <div className="text-right flex-shrink-0 ml-2">
+            <p className={`font-semibold text-sm sm:text-base ${getTransactionColor(transaction.type)}`}>
               {transaction.type === 'deposit' ? '+' : '-'}
               {formatCurrency(parseFloat(transaction.amount))}
             </p>
-            <Badge variant={transaction.status === 'completed' ? 'success' : 'pending'} className="text-xs">
+            <Badge variant={transaction.status === 'completed' ? 'success' : 'pending'} className="text-xs mt-1">
               {transaction.status}
             </Badge>
           </div>
