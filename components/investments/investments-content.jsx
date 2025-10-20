@@ -17,6 +17,7 @@ import { formatCurrency } from "@/lib/utils"
 import { InvestmentOpportunities } from "./investment-opportunities"
 import { PortfolioOverview } from "./portfolio-overview"
 import { InvestModal } from "./invest-modal"
+import { InvestmentCharts } from "./investment-charts"
 
 export function InvestmentsContent({ user, investments }) {
   const [activeTab, setActiveTab] = useState("overview")
@@ -143,6 +144,11 @@ export function InvestmentsContent({ user, investments }) {
             <span className="hidden sm:inline">Overview</span>
             <span className="sm:hidden">Overview</span>
           </TabsTrigger>
+          <TabsTrigger value="charts" active={activeTab === "charts"} className="flex-shrink-0">
+            <TrendingUp className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Charts</span>
+            <span className="sm:hidden">Charts</span>
+          </TabsTrigger>
           {categories.map(category => (
             <TabsTrigger 
               key={category.id} 
@@ -164,6 +170,10 @@ export function InvestmentsContent({ user, investments }) {
             totalInvested={totalInitialInvestment}
             portfolioValue={portfolioValue}
           />
+        </TabsContent>
+
+        <TabsContent value="charts">
+          <InvestmentCharts investments={investments} />
         </TabsContent>
 
         {categories.map(category => (
