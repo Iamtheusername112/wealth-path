@@ -258,20 +258,35 @@ export function Navbar({ user }) {
                 </div>
               )}
 
-              {user && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden h-9 w-9"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                >
-                  {mobileMenuOpen ? (
-                    <X className="h-5 w-5" />
-                  ) : (
-                    <Menu className="h-5 w-5" />
-                  )}
-                </Button>
-              )}
+                      {user && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="md:hidden h-9 w-9 relative"
+                          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        >
+                          <div className="relative w-5 h-5 flex items-center justify-center">
+                            {/* Animated Hamburger Menu */}
+                            <div className="absolute inset-0 flex flex-col justify-center gap-1.5">
+                              <span 
+                                className={`block h-0.5 w-5 bg-current rounded-full transition-all duration-300 origin-center ${
+                                  mobileMenuOpen ? 'rotate-45 translate-y-2' : 'rotate-0 translate-y-0'
+                                }`}
+                              />
+                              <span 
+                                className={`block h-0.5 w-5 bg-current rounded-full transition-all duration-300 ${
+                                  mobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
+                                }`}
+                              />
+                              <span 
+                                className={`block h-0.5 w-5 bg-current rounded-full transition-all duration-300 origin-center ${
+                                  mobileMenuOpen ? '-rotate-45 -translate-y-2' : 'rotate-0 translate-y-0'
+                                }`}
+                              />
+                            </div>
+                          </div>
+                        </Button>
+                      )}
             </div>
           </div>
         </div>
