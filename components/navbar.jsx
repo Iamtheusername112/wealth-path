@@ -296,100 +296,52 @@ export function Navbar({ user }) {
             {/* Menu Content */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-6">
               {/* User Profile */}
-              <div className="mb-6 pb-6 border-b">
-                <div className="flex items-center gap-3">
+              <div className="mb-8">
+                <div className="flex flex-col items-center text-center gap-4">
                   {user && (user.profileImageUrl || user.profile_image_url || user.imageUrl) && (
                     <img 
                       src={user.profileImageUrl || user.profile_image_url || user.imageUrl} 
                       alt={user?.full_name || 'User'}
-                      className="w-16 h-16 rounded-full object-cover border-4 border-gold-600 shadow-lg"
+                      className="w-24 h-24 rounded-full object-cover border-4 border-gold-600 shadow-2xl"
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-lg">{user?.full_name || 'User'}</p>
-                    <p className="text-sm text-muted-foreground truncate">{user?.email}</p>
+                    <p className="font-bold text-xl mb-1">{user?.full_name || 'User'}</p>
+                    <p className="text-sm text-muted-foreground truncate px-4">{user?.email}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Quick Actions */}
-              <div className="space-y-3 mb-6">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">Quick Actions</h3>
+              {/* Account Actions */}
+              <div className="space-y-3 safe-area-bottom">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2 mb-4">Account</h3>
                 
-                {/* Notifications with Preview */}
-                <Link
-                  href="/notifications"
-                  className={cn(
-                    "block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 hover:scale-[1.02]",
-                    pathname === "/notifications"
-                      ? "bg-gradient-to-r from-yellow-600 to-yellow-700 text-white shadow-lg"
-                      : "bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover:from-blue-100 hover:to-blue-200 dark:hover:from-blue-900/40 dark:hover:to-blue-800/40"
-                  )}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-3">
-                      <div className="p-2 bg-white/20 dark:bg-black/20 rounded-lg">
-                        <Bell className="h-5 w-5" />
-                      </div>
-                      <span>Notifications</span>
-                    </span>
-                    {unreadCount > 0 && (
-                      <Badge variant="destructive" className="animate-pulse">
-                        {unreadCount}
-                      </Badge>
-                    )}
-                  </div>
-                </Link>
-
-                {/* Recent Notifications Preview */}
-                {notifications.length > 0 && (
-                  <div className="ml-4 space-y-2 pl-4 border-l-2 border-gold-600/30">
-                    {notifications.slice(0, 3).map((notification) => {
-                      const Icon = getNotificationIcon(notification.message)
-                      return (
-                        <div
-                          key={notification.id}
-                          className={cn(
-                            "px-3 py-2 rounded-lg text-xs cursor-pointer transition-all hover:scale-[1.02]",
-                            !notification.is_read 
-                              ? 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 border border-blue-200 dark:border-blue-800' 
-                              : 'bg-muted/50 hover:bg-muted'
-                          )}
-                          onClick={() => {
-                            handleNotificationClick(notification.id)
-                            setMobileMenuOpen(false)
-                          }}
-                        >
-                          <div className="flex items-start gap-2">
-                            <Icon className="h-4 w-4 mt-0.5 text-gold-600 flex-shrink-0" />
-                            <p className="flex-1 line-clamp-2 leading-relaxed">{notification.message}</p>
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* Settings & Logout */}
-              <div className="pt-6 border-t space-y-2 safe-area-bottom">
                 <Link
                   href="/settings"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium hover:bg-accent transition-all duration-200 min-h-[44px] min-w-[44px]"
+                  className="flex items-center gap-4 px-5 py-4 rounded-xl text-base font-medium bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.02] min-h-[56px]"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <Settings className="h-5 w-5 text-yellow-600" />
-                  <span>Settings</span>
+                  <div className="p-2 bg-yellow-600 rounded-lg">
+                    <Settings className="h-5 w-5 text-white" />
+                  </div>
+                  <span className="flex-1">Settings</span>
+                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
                 
                 <SignOutButton>
                   <button
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all duration-200 min-h-[44px] min-w-[44px]"
+                    className="w-full flex items-center gap-4 px-5 py-4 rounded-xl text-base font-medium bg-gradient-to-r from-red-50 to-red-100 dark:from-red-950/20 dark:to-red-900/20 hover:from-red-100 hover:to-red-200 dark:hover:from-red-900/30 dark:hover:to-red-800/30 transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.02] min-h-[56px] text-red-600 dark:text-red-400"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <LogOut className="h-5 w-5" />
-                    <span>Log Out</span>
+                    <div className="p-2 bg-red-600 rounded-lg">
+                      <LogOut className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="flex-1 text-left font-semibold">Log Out</span>
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
                   </button>
                 </SignOutButton>
               </div>
