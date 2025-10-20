@@ -16,6 +16,8 @@ import { UserManagement } from "./user-management"
 import { KYCManagement } from "./kyc-management"
 import { TransactionManagement } from "./transaction-management"
 import { CardRequestManagement } from "./card-request-management"
+import { BalanceManagement } from "./balance-management"
+import { InvestmentManagement } from "./investment-management"
 
 export function AdminContent({ users, kycDocuments, transactions, investments }) {
   const [activeTab, setActiveTab] = useState("overview")
@@ -83,12 +85,18 @@ export function AdminContent({ users, kycDocuments, transactions, investments })
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="w-full justify-start">
+        <TabsList className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="overview" active={activeTab === "overview"}>
             Overview
           </TabsTrigger>
           <TabsTrigger value="users" active={activeTab === "users"}>
             Users
+          </TabsTrigger>
+          <TabsTrigger value="balance" active={activeTab === "balance"}>
+            Balance Control
+          </TabsTrigger>
+          <TabsTrigger value="investments" active={activeTab === "investments"}>
+            Investments
           </TabsTrigger>
           <TabsTrigger value="kyc" active={activeTab === "kyc"}>
             KYC Verification
@@ -148,6 +156,14 @@ export function AdminContent({ users, kycDocuments, transactions, investments })
 
         <TabsContent value="users">
           <UserManagement users={users} />
+        </TabsContent>
+
+        <TabsContent value="balance">
+          <BalanceManagement users={users} />
+        </TabsContent>
+
+        <TabsContent value="investments">
+          <InvestmentManagement users={users} investments={investments} />
         </TabsContent>
 
         <TabsContent value="kyc">
