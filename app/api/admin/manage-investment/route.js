@@ -1,21 +1,18 @@
 import { NextResponse } from "next/server"
-import { auth } from "@clerk/nextjs/server"
+import { cookies } from "next/headers"
 import { supabaseAdmin } from "@/lib/supabase-admin"
-import { requireAdmin } from "@/lib/check-admin"
 
 // Admin endpoint to add, modify, or remove user investments
 export async function POST(request) {
   try {
-    const { userId: authUserId } = await auth()
+    // Check admin authentication via cookie (not Clerk)
+    const cookieStore = await cookies()
+    const adminToken = cookieStore.get('admin_token')
 
-    if (!authUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
-    // Check if user is admin (auto-creates if ADMIN_EMAIL matches)
-    const { authorized, response } = await requireAdmin()
-    if (!authorized) {
-      return NextResponse.json({ error: response.error }, { status: response.status })
+    if (!adminToken || adminToken.value !== 'admin_authenticated') {
+      return NextResponse.json({ 
+        error: "Unauthorized. Please login at /admin-login" 
+      }, { status: 401 })
     }
 
     const { action, userId, investmentData } = await request.json()
