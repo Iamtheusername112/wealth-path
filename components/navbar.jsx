@@ -298,16 +298,16 @@ export function Navbar({ user }) {
               {/* User Profile */}
               <div className="mb-6 pb-6 border-b">
                 <div className="flex items-center gap-3">
-                  {(user.profileImageUrl || user.profile_image_url || user.imageUrl) && (
+                  {user && (user.profileImageUrl || user.profile_image_url || user.imageUrl) && (
                     <img 
                       src={user.profileImageUrl || user.profile_image_url || user.imageUrl} 
-                      alt={user.full_name || 'User'}
+                      alt={user?.full_name || 'User'}
                       className="w-12 h-12 rounded-full object-cover border-2 border-gold-600"
                     />
                   )}
                   <div>
-                    <p className="font-semibold">{user.full_name || 'User'}</p>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                    <p className="font-semibold">{user?.full_name || 'User'}</p>
+                    <p className="text-sm text-muted-foreground">{user?.email}</p>
                   </div>
                 </div>
               </div>
