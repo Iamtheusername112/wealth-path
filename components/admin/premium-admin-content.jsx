@@ -42,6 +42,7 @@ import { SupportTicketManagement } from "./support-ticket-management"
 import { BalanceManagement } from "./balance-management"
 import { InvestmentManagement } from "./investment-management"
 import { InvestmentProfitControl } from "./investment-profit-control"
+import { AdminAnalytics } from "./admin-analytics"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 
@@ -60,7 +61,7 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
   // Handle tab parameter from URL
   useEffect(() => {
     const tab = searchParams.get('tab')
-    if (tab && ['overview', 'users', 'balance', 'manage-investments', 'profit-control', 'kyc', 'deposits', 'transactions', 'investments', 'cards'].includes(tab)) {
+    if (tab && ['overview', 'analytics', 'users', 'balance', 'manage-investments', 'profit-control', 'kyc', 'deposits', 'transactions', 'investments', 'cards'].includes(tab)) {
       setActiveTab(tab)
     }
   }, [searchParams])
@@ -251,6 +252,10 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
             <Activity className="h-4 w-4" />
             Overview
           </TabsTrigger>
+          <TabsTrigger value="analytics" active={activeTab === "analytics"} className="gap-2 flex-shrink-0">
+            <TrendingUp className="h-4 w-4" />
+            Analytics
+          </TabsTrigger>
           <TabsTrigger value="users" active={activeTab === "users"} className="gap-2 flex-shrink-0">
             <Users className="h-4 w-4" />
             Users ({users.length})
@@ -304,6 +309,15 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
         </TabsList>
 
         {/* Overview Tab */}
+        <TabsContent value="analytics">
+          <AdminAnalytics 
+            users={users} 
+            transactions={transactions}
+            investments={investments}
+            depositRequests={depositRequests}
+          />
+        </TabsContent>
+
         <TabsContent value="overview">
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Recent Activity */}
