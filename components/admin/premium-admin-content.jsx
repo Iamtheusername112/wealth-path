@@ -39,6 +39,8 @@ import { PendingDeposits } from "./pending-deposits"
 import { CardRequestManagement } from "./card-request-management"
 import { UserManagement } from "./user-management"
 import { SupportTicketManagement } from "./support-ticket-management"
+import { BalanceManagement } from "./balance-management"
+import { InvestmentManagement } from "./investment-management"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 
@@ -57,7 +59,7 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
   // Handle tab parameter from URL
   useEffect(() => {
     const tab = searchParams.get('tab')
-    if (tab && ['overview', 'users', 'kyc', 'deposits', 'transactions', 'investments', 'cards'].includes(tab)) {
+    if (tab && ['overview', 'users', 'balance', 'manage-investments', 'kyc', 'deposits', 'transactions', 'investments', 'cards'].includes(tab)) {
       setActiveTab(tab)
     }
   }, [searchParams])
@@ -243,32 +245,40 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="w-full justify-start bg-muted/50 p-1">
-          <TabsTrigger value="overview" active={activeTab === "overview"} className="gap-2">
+        <TabsList className="w-full justify-start bg-muted/50 p-1 overflow-x-auto">
+          <TabsTrigger value="overview" active={activeTab === "overview"} className="gap-2 flex-shrink-0">
             <Activity className="h-4 w-4" />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="users" active={activeTab === "users"} className="gap-2">
+          <TabsTrigger value="users" active={activeTab === "users"} className="gap-2 flex-shrink-0">
             <Users className="h-4 w-4" />
             Users ({users.length})
           </TabsTrigger>
-          <TabsTrigger value="kyc" active={activeTab === "kyc"} className="gap-2">
+          <TabsTrigger value="balance" active={activeTab === "balance"} className="gap-2 flex-shrink-0">
+            <DollarSign className="h-4 w-4" />
+            Balance Control
+          </TabsTrigger>
+          <TabsTrigger value="manage-investments" active={activeTab === "manage-investments"} className="gap-2 flex-shrink-0">
+            <TrendingUp className="h-4 w-4" />
+            Manage Investments
+          </TabsTrigger>
+          <TabsTrigger value="kyc" active={activeTab === "kyc"} className="gap-2 flex-shrink-0">
             <FileCheck className="h-4 w-4" />
             KYC ({stats.pendingKYC})
           </TabsTrigger>
-          <TabsTrigger value="deposits" active={activeTab === "deposits"} className="gap-2">
+          <TabsTrigger value="deposits" active={activeTab === "deposits"} className="gap-2 flex-shrink-0">
             <DollarSign className="h-4 w-4" />
             Deposits ({stats.pendingDeposits})
           </TabsTrigger>
-          <TabsTrigger value="transactions" active={activeTab === "transactions"} className="gap-2">
+          <TabsTrigger value="transactions" active={activeTab === "transactions"} className="gap-2 flex-shrink-0">
             <Activity className="h-4 w-4" />
             Transactions
           </TabsTrigger>
-          <TabsTrigger value="investments" active={activeTab === "investments"} className="gap-2">
+          <TabsTrigger value="investments" active={activeTab === "investments"} className="gap-2 flex-shrink-0">
             <TrendingUp className="h-4 w-4" />
-            Investments
+            Investment Overview
           </TabsTrigger>
-          <TabsTrigger value="cards" active={activeTab === "cards"} className="gap-2">
+          <TabsTrigger value="cards" active={activeTab === "cards"} className="gap-2 flex-shrink-0">
             <CreditCard className="h-4 w-4" />
             Cards
             {stats.pendingCardRequests > 0 && (
@@ -277,7 +287,7 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="support" active={activeTab === "support"} className="gap-2">
+          <TabsTrigger value="support" active={activeTab === "support"} className="gap-2 flex-shrink-0">
             <MessageSquare className="h-4 w-4" />
             Support
             {(supportTickets?.filter(t => t.status === 'open' || t.status === 'in_progress').length || 0) > 0 && (
@@ -504,6 +514,16 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
         {/* Users Tab */}
         <TabsContent value="users">
           <UserManagement users={users} onUserUpdate={handleUserUpdate} />
+        </TabsContent>
+
+        {/* Balance Control Tab */}
+        <TabsContent value="balance">
+          <BalanceManagement users={users} />
+        </TabsContent>
+
+        {/* Manage Investments Tab */}
+        <TabsContent value="manage-investments">
+          <InvestmentManagement users={users} investments={investments} />
         </TabsContent>
 
         {/* KYC Tab */}
