@@ -129,6 +129,33 @@ body {
   .dark [data-radix-dialog-content][data-side] {
     background: rgb(17, 24, 39) !important;
   }
+  
+  /* Smooth slide animations for mobile menu */
+  [data-radix-dialog-content][data-side="right"] {
+    animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  
+  [data-radix-dialog-content][data-side="right"][data-state="closed"] {
+    animation: slideOutToRight 0.2s cubic-bezier(0.4, 0, 1, 1) !important;
+  }
+  
+  @keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideOutToRight {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
 }
 
 /* Premium Mobile-First Styles */
