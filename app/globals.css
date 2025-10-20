@@ -130,32 +130,87 @@ body {
     background: rgb(17, 24, 39) !important;
   }
   
-  /* Smooth slide animations for mobile menu */
-  [data-radix-dialog-content][data-side="right"] {
-    animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+/* Smooth slide animations for mobile menu */
+[data-radix-dialog-content][data-side="right"] {
+  animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-radix-dialog-content][data-side="right"][data-state="closed"] {
+  animation: slideOutToRight 0.2s cubic-bezier(0.4, 0, 1, 1) !important;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
   }
-  
-  [data-radix-dialog-content][data-side="right"][data-state="closed"] {
-    animation: slideOutToRight 0.2s cubic-bezier(0.4, 0, 1, 1) !important;
+  to {
+    transform: translateX(0);
   }
-  
-  @keyframes slideInFromRight {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
   }
-  
-  @keyframes slideOutToRight {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(100%);
-    }
+  to {
+    transform: translateX(100%);
   }
+}
+
+/* Success animations */
+@keyframes success-scale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes success-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes success-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-success-scale {
+  animation: success-scale 0.6s ease-in-out;
+}
+
+.animate-success-bounce {
+  animation: success-bounce 0.5s ease-in-out;
+}
+
+.animate-success-spin {
+  animation: success-spin 0.5s ease-in-out;
+}
+
+.animate-confetti {
+  animation: confetti 3s ease-out forwards;
+}
 }
 
 /* Premium Mobile-First Styles */
