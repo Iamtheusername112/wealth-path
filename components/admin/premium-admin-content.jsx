@@ -41,6 +41,7 @@ import { UserManagement } from "./user-management"
 import { SupportTicketManagement } from "./support-ticket-management"
 import { BalanceManagement } from "./balance-management"
 import { InvestmentManagement } from "./investment-management"
+import { InvestmentProfitControl } from "./investment-profit-control"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 
@@ -59,7 +60,7 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
   // Handle tab parameter from URL
   useEffect(() => {
     const tab = searchParams.get('tab')
-    if (tab && ['overview', 'users', 'balance', 'manage-investments', 'kyc', 'deposits', 'transactions', 'investments', 'cards'].includes(tab)) {
+    if (tab && ['overview', 'users', 'balance', 'manage-investments', 'profit-control', 'kyc', 'deposits', 'transactions', 'investments', 'cards'].includes(tab)) {
       setActiveTab(tab)
     }
   }, [searchParams])
@@ -261,6 +262,10 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
           <TabsTrigger value="manage-investments" active={activeTab === "manage-investments"} className="gap-2 flex-shrink-0">
             <TrendingUp className="h-4 w-4" />
             Manage Investments
+          </TabsTrigger>
+          <TabsTrigger value="profit-control" active={activeTab === "profit-control"} className="gap-2 flex-shrink-0">
+            <TrendingUp className="h-4 w-4" />
+            Profit/Loss Control
           </TabsTrigger>
           <TabsTrigger value="kyc" active={activeTab === "kyc"} className="gap-2 flex-shrink-0">
             <FileCheck className="h-4 w-4" />
@@ -524,6 +529,11 @@ export function PremiumAdminContent({ users, kycDocuments, transactions, investm
         {/* Manage Investments Tab */}
         <TabsContent value="manage-investments">
           <InvestmentManagement users={users} investments={investments} />
+        </TabsContent>
+
+        {/* Profit/Loss Control Tab */}
+        <TabsContent value="profit-control">
+          <InvestmentProfitControl users={users} investments={investments} />
         </TabsContent>
 
         {/* KYC Tab */}
