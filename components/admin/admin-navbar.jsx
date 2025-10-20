@@ -46,7 +46,8 @@ export function AdminNavbar({ pendingKYC: initialPendingKYC = 0, pendingDeposits
         }
       }
     } catch (error) {
-      console.error('Error fetching pending counts:', error)
+      // Silently fail - this is non-critical
+      // The counts will use the initial values passed as props
     }
   }
 
