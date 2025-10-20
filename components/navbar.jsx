@@ -302,69 +302,59 @@ export function Navbar({ user }) {
                     <img 
                       src={user.profileImageUrl || user.profile_image_url || user.imageUrl} 
                       alt={user?.full_name || 'User'}
-                      className="w-12 h-12 rounded-full object-cover border-2 border-gold-600"
+                      className="w-16 h-16 rounded-full object-cover border-4 border-gold-600 shadow-lg"
                     />
                   )}
-                  <div>
-                    <p className="font-semibold">{user?.full_name || 'User'}</p>
-                    <p className="text-sm text-muted-foreground">{user?.email}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-lg">{user?.full_name || 'User'}</p>
+                    <p className="text-sm text-muted-foreground truncate">{user?.email}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Navigation Links */}
-              <div className="space-y-1 mb-6">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 min-h-[44px] min-w-[44px]",
-                      pathname === item.href
-                        ? "bg-gradient-to-r from-yellow-600 to-yellow-700 text-white shadow-lg"
-                        : "hover:bg-accent hover:translate-x-1"
-                    )}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Notifications */}
-              <div className="mb-6">
+              {/* Quick Actions */}
+              <div className="space-y-3 mb-6">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">Quick Actions</h3>
+                
+                {/* Notifications with Preview */}
                 <Link
                   href="/notifications"
                   className={cn(
-                    "block px-4 py-3 rounded-lg text-base font-medium transition-all flex items-center justify-between",
+                    "block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 hover:scale-[1.02]",
                     pathname === "/notifications"
                       ? "bg-gradient-to-r from-yellow-600 to-yellow-700 text-white shadow-lg"
-                      : "hover:bg-accent"
+                      : "bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover:from-blue-100 hover:to-blue-200 dark:hover:from-blue-900/40 dark:hover:to-blue-800/40"
                   )}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <span className="flex items-center gap-2">
-                    <Bell className="h-5 w-5" />
-                    Notifications
-                  </span>
-                  {unreadCount > 0 && (
-                    <Badge variant="destructive" className="animate-pulse">
-                      {unreadCount}
-                    </Badge>
-                  )}
+                  <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-3">
+                      <div className="p-2 bg-white/20 dark:bg-black/20 rounded-lg">
+                        <Bell className="h-5 w-5" />
+                      </div>
+                      <span>Notifications</span>
+                    </span>
+                    {unreadCount > 0 && (
+                      <Badge variant="destructive" className="animate-pulse">
+                        {unreadCount}
+                      </Badge>
+                    )}
+                  </div>
                 </Link>
 
                 {/* Recent Notifications Preview */}
                 {notifications.length > 0 && (
-                  <div className="mt-3 space-y-2">
+                  <div className="ml-4 space-y-2 pl-4 border-l-2 border-gold-600/30">
                     {notifications.slice(0, 3).map((notification) => {
                       const Icon = getNotificationIcon(notification.message)
                       return (
                         <div
                           key={notification.id}
                           className={cn(
-                            "px-3 py-2 rounded-md text-xs cursor-pointer transition-colors",
-                            !notification.is_read ? 'bg-blue-50 dark:bg-blue-950/20' : 'bg-muted/50'
+                            "px-3 py-2 rounded-lg text-xs cursor-pointer transition-all hover:scale-[1.02]",
+                            !notification.is_read 
+                              ? 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 border border-blue-200 dark:border-blue-800' 
+                              : 'bg-muted/50 hover:bg-muted'
                           )}
                           onClick={() => {
                             handleNotificationClick(notification.id)
@@ -372,8 +362,8 @@ export function Navbar({ user }) {
                           }}
                         >
                           <div className="flex items-start gap-2">
-                            <Icon className="h-3 w-3 mt-0.5 text-gold-600" />
-                            <p className="flex-1 line-clamp-2">{notification.message}</p>
+                            <Icon className="h-4 w-4 mt-0.5 text-gold-600 flex-shrink-0" />
+                            <p className="flex-1 line-clamp-2 leading-relaxed">{notification.message}</p>
                           </div>
                         </div>
                       )
